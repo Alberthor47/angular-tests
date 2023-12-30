@@ -12,6 +12,9 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build
+      - name: Get short SHA
+        id: short-sha
+        run: echo "::set-output name=sha::$(echo ${GITHUB_SHA::8})"
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -19,4 +22,5 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANGULAR_TESTS_37360 }}'
           projectId: angular-tests-37360
           target: prev
+          channelId: ${{ steps.short-sha.outputs.sha }}
           expires: 3d
