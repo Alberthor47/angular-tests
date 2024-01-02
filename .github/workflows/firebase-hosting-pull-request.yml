@@ -2,19 +2,58 @@ name: Deploy Preview Channel on Firebase Hosting
 run-name: ${{ github.actor }} on ${{ github.event.action }} - ${{ github.event.pull_request.number }} is deploying a preview URl
 on: pull_request
 jobs:
-  build_and_preview:
-    name: Build and Deploy Preview Channel
+  # build_and_preview:
+  #   name: Build and Deploy Preview Channel
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #     - name: Install Dependencies
+  #       run: npm ci
+  #     - name: Build
+  #       run: npm run build
+  #     - name: Get short SHA
+  #       run: echo "SHORT_SHA=${GITHUB_SHA::8}" >> $GITHUB_ENV
+  #     - name: Deploy to Firebase Hosting
+  #       uses: FirebaseExtended/action-hosting-deploy@v0
+  #       with:
+  #         repoToken: '${{ secrets.GITHUB_TOKEN }}'
+  #         firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANGULAR_TESTS_37360 }}'
+  #         projectId: angular-tests-37360
+  #         target: prev
+  #         channelId: ${{ env.SHORT_SHA }}
+  #         expires: 3d
+
+  build:
+    name: Build for QA environment
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Install Dependencies
         run: npm ci
-      - name: Build
+      - name: Build Script
         run: npm run build
-      - name: Get short SHA
-        id: short-sha
-        run: echo "::set-output name=sha::$(echo ${GITHUB_SHA::8})"
+      - name: Archive Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+  deploy:
+    name: Deploy to QA environment
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+      - name: Get Short SHA
+        run: echo "SHORT_SHA=${GITHUB_SHA::8}" >> $GITHUB_ENV
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -22,5 +61,14 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANGULAR_TESTS_37360 }}'
           projectId: angular-tests-37360
           target: prev
-          channelId: ${{ steps.short-sha.outputs.sha }}
+          channelId: ${{ env.SHORT_SHA }}
           expires: 3d
+
+          # TODO: 
+          # - Separate in stepps or even jobs
+          #   - check in deepth what is the difference between them (jobs and steps)
+          # - Look for the previous commit in the PR and delete the deploy related to it before making the new one
+          #   - learn more about enviroments and where to store the previous commit
+          # - Do the same for deliting the PR deploy when merged
+          # - Verify this works for multiple branches
+          #   - Limit functionality to PRs for develpment only
