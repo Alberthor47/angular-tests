@@ -1,0 +1,22 @@
+name: Delete Preview Channel on Firebase Hosting
+run-name: ${{ github.actor }} ${{ github.event_name }}/${{ github.event.action }} '#${{ github.event.pull_request.number }}' is deleting preview
+on: 
+  pull_request:
+    branches:
+      - development
+    types:
+      - closed
+jobs:
+
+  delete:
+    name: Delete Preview Channel
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Delete Preview Channel
+        uses: w9jds/firebase-action@master
+        with:
+          args: hosting:channel:delete prev-pr${{ github.event.pull_request.number }} --site pre-angular-tests -f
+        env:
+          GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANGULAR_TESTS_37360 }}

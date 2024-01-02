@@ -13,9 +13,6 @@ export class AppComponent {
   title = 'todo-app';
   welcome = 'Bienvenido a mi primera aplicación con Angular';
   tasks = [
-    'Verificar para multiples ramas',
-    'Borrar al hacer merge del PR',
-    'Testear produccion final',
-    'Limitar funcionalidad de previe a pr de development'
+    'Listo :D',
   ];
 }
