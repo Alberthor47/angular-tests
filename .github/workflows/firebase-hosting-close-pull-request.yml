@@ -23,6 +23,6 @@ jobs:
       - name: Delete Preview Channel
         uses: w9jds/firebase-action@master
         with:
-          args: hosting:channel:delete prev-pr${{ github.event.pull_request.number }} --site pre-angular-tests
+          args: hosting:channel:delete prev-pr${{ github.event.pull_request.number }} --site pre-angular-tests -f
         env:
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANGULAR_TESTS_37360 }}
