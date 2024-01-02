@@ -1,5 +1,5 @@
 name: Deploy Live Channel on Firebase Hosting
-run-name: ${{ github.actor }} on ${{ github.event_name }} '#${{ github.event.pull_request.number }}' is deploying to production
+run-name: ${{ github.actor }} merge/${{ github.event_name }} is deploying to production
 on:
   push:
     branches:
@@ -16,10 +16,6 @@ jobs:
         run: npm ci
       - name: Build
         run: npm run build-prod
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
       - name: Archive Production Artifact
         uses: actions/upload-artifact@v4
         with:
