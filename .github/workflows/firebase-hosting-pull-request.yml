@@ -31,16 +31,6 @@ jobs:
         with:
           name: dist
           path: dist
-      - name: Get Short SHA
-        run: echo "SHORT_SHA=${GITHUB_EVENT_AFTER::8}" >> $GITHUB_ENV
-      - name: Dump env context
-        env: 
-          ENV_CONTEXT: ${{ toJson(env) }}
-        run: echo "$ENV_CONTEXT"
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
@@ -48,10 +38,4 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANGULAR_TESTS_37360 }}'
           projectId: angular-tests-37360
           target: prev
-          # channelId: ${{ env.SHORT_SHA }}
           expires: 3d
-
-          # TODO: 
-          # - Do the same for deliting the PR deploy when merged
-          # - Verify this works for multiple branches
-          #   - Limit functionality to PRs for develpment only

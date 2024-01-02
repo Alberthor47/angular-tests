@@ -15,6 +15,7 @@ export class AppComponent {
   tasks = [
     'Verificar para multiples ramas',
     'Borrar al hacer merge del PR',
-    'Testear produccion final'
+    'Testear produccion final',
+    'Limitar funcionalidad de previe a pr de development'
   ];
 }
