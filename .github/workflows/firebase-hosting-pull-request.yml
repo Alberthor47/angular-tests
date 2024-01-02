@@ -1,5 +1,5 @@
 name: Deploy Preview Channel on Firebase Hosting
-run-name: ${{ github.actor }} on ${{ github.event.action }} / ${{ github.event_name }} "#"${{ github.event.pull_request.number }} is deploying a preview URl
+run-name: ${{ github.actor }} on ${{ github.event_name }}/${{ github.event.action }} '#${{ github.event.pull_request.number }}' is deploying to preview
 on: pull_request
 jobs:
 

@@ -17,5 +17,6 @@ export class AppComponent {
     'Crear proyecto',
     'Crear componente',
     'Crear servicio',
+    'Verificar si se actualiza con cada actualizacion al PR'
   ];
 }
