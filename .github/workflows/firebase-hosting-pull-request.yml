@@ -1,5 +1,5 @@
 name: Deploy Preview Channel on Firebase Hosting
-run-name: ${{ github.actor }} on ${{ github.event_name }}/${{ github.event.action }} '#${{ github.event.pull_request.number }}' is deploying to preview
+run-name: ${{ github.actor }} on ${{ github.event_name }}/${{ github.event.action }} '#${{ github.event.pull_request.number }}' is deploying a preview
 on: pull_request
 jobs:
 
@@ -52,8 +52,6 @@ jobs:
           expires: 3d
 
           # TODO: 
-          # - Look for the previous commit in the PR and delete the deploy related to it before making the new one
-          #   - learn more about enviroments and where to store the previous commit
           # - Do the same for deliting the PR deploy when merged
           # - Verify this works for multiple branches
           #   - Limit functionality to PRs for develpment only
