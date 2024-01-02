@@ -45,4 +45,4 @@ jobs:
           projectId: angular-tests-37360
           target: prev
           channelId: prev-pr${{ github.event.pull_request.number }}
-          expires: 3d
+          expires: 5d
