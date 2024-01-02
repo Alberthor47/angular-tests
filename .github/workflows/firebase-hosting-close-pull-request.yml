@@ -12,10 +12,8 @@ jobs:
     name: Delete Preview Channel
     runs-on: ubuntu-latest
     steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
+      - name: Checkout Repo
+        uses: actions/checkout@master
       - name: List preview channels
         uses: w9jds/firebase-action@master
         with:
