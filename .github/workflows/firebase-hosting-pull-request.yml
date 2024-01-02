@@ -1,5 +1,5 @@
 name: Deploy Preview Channel on Firebase Hosting
-run-name: ${{ github.actor }} on ${{ github.event.action }} PR #${{ github.event.pull_request.number }} is deploying a preview URl
+run-name: ${{ github.actor }} on ${{ github.event.action }} / ${{ github.event_name }} "#"${{ github.event.pull_request.number }} is deploying a preview URl
 on: pull_request
 jobs:
 
@@ -32,7 +32,7 @@ jobs:
           name: dist
           path: dist
       - name: Get Short SHA
-        run: echo "SHORT_SHA=${GITHUB_SHA::8}" >> $GITHUB_ENV
+        run: echo "SHORT_SHA=${GITHUB_EVENT_AFTER::8}" >> $GITHUB_ENV
       - name: Dump env context
         env: 
           ENV_CONTEXT: ${{ toJson(env) }}

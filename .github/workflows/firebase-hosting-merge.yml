@@ -1,5 +1,5 @@
 name: Deploy Live Channel on Firebase Hosting
-run-name: ${{ github.actor }} on ${{ github.event.action }} is deploying to production
+run-name: ${{ github.actor }} on ${{ github.event.action }} / ${{ github.event_name }} is deploying to production
 on:
   push:
     branches:
