@@ -41,4 +41,5 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANGULAR_TESTS_37360 }}'
           projectId: angular-tests-37360
           target: prev
+          channelId: prev-pr${{ github.event.pull_request.number }}
           expires: 3d
