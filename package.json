@@ -1,11 +1,11 @@
 {
-  "name": "curso-angular",
+  "name": "angular-tests",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development",
+    "build-prod": "ng build --configuration production",
     "test": "ng test"
   },
   "private": true,

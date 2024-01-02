@@ -1,0 +1,26 @@
+{
+  "projects": {
+    "default": "angular-tests-37360",
+    "qa": "qa-angular-test"
+  },
+  "targets": {
+    "angular-tests-37360": {
+      "hosting": {
+        "prod": [
+          "angular-tests-37360"
+        ],
+        "prev": [
+          "pre-angular-tests"
+        ]
+      }
+    },
+    "qa-angular-test": {
+      "hosting": {
+        "qa": [
+          "qa-angular-tests"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

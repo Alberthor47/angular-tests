@@ -13,9 +13,9 @@ export class AppComponent {
   title = 'todo-app';
   welcome = 'Bienvenido a mi primera aplicación con Angular';
   tasks = [
-    'Instalar Angular CLI',
-    'Crear proyecto',
-    'Crear componente',
-    'Crear servicio',
+    'Al parecer si seactualiza',
+    'Verificar para multiples ramas',
+    'Borrar al hacer merge del PR',
+    'Testear produccion final'
   ];
 }

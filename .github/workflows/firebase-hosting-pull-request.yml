@@ -1,0 +1,59 @@
+name: Deploy Preview Channel on Firebase Hosting
+run-name: ${{ github.actor }} on ${{ github.event_name }}/${{ github.event.action }} '#${{ github.event.pull_request.number }}' is deploying to preview
+on: pull_request
+jobs:
+
+  build:
+    name: Build for QA environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: npm ci
+      - name: Build Script
+        run: npm run build
+      - name: Archive Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+  deploy:
+    name: Deploy to QA environment
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+      - name: Get Short SHA
+        run: echo "SHORT_SHA=${GITHUB_EVENT_AFTER::8}" >> $GITHUB_ENV
+      - name: Dump env context
+        env: 
+          ENV_CONTEXT: ${{ toJson(env) }}
+        run: echo "$ENV_CONTEXT"
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANGULAR_TESTS_37360 }}'
+          projectId: angular-tests-37360
+          target: prev
+          # channelId: ${{ env.SHORT_SHA }}
+          expires: 3d
+
+          # TODO: 
+          # - Look for the previous commit in the PR and delete the deploy related to it before making the new one
+          #   - learn more about enviroments and where to store the previous commit
+          # - Do the same for deliting the PR deploy when merged
+          # - Verify this works for multiple branches
+          #   - Limit functionality to PRs for develpment only
