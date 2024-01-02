@@ -17,12 +17,12 @@ jobs:
       - name: List preview channels
         uses: w9jds/firebase-action@master
         with:
-          args: hosting:channel:list
+          args: hosting:channel:list --only prev
         env:
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANGULAR_TESTS_37360 }}
       - name: Delete Preview Channel
         uses: w9jds/firebase-action@master
         with:
-          args: hosting:channel:delete prev-pr${{ github.event.pull_request.number }}
+          args: hosting:channel:delete prev-pr${{ github.event.pull_request.number }} --only prev
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANGULAR_TESTS_37360 }}
+          GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANGULAR_TESTS_37360 }}
