@@ -13,13 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@master
-      - name: List preview channels
-        uses: w9jds/firebase-action@master
-        with:
-          args: hosting:channel:list --site pre-angular-tests
-        env:
-          GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANGULAR_TESTS_37360 }}
+        uses: actions/checkout@v3
       - name: Delete Preview Channel
         uses: w9jds/firebase-action@master
         with:
