@@ -24,6 +24,7 @@ jobs:
 
   deploy:
     name: Deploy to Production environment
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
