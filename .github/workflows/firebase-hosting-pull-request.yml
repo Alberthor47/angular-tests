@@ -51,7 +51,6 @@ jobs:
           expires: 5d
 
   announce: 
-    # name: Announce Deploy Preview Channel
     if: ${{ always() }}
     needs: [build, deploy]
     runs-on: ubuntu-latest
@@ -88,13 +87,12 @@ jobs:
           timezone: "America/Mexico_City"
           view-status-action-text: "See action on GH"
           allowed-file-len: 10
-          # show-on-failure: true
           custom-actions: |
             - text: See preview channel
               url: "${{ env.DEPLOY_URL }}"
           custom-facts: |
             - name: Message
-              value: "Pull recent changes to avoid conflicts"
+              value: "Heeads up on the preview channel"
             - name: Reviewers
               value: ${{ env.REVIEWERS }}
             - name: Assignees
