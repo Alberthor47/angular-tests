@@ -14,6 +14,6 @@ export class AppComponent {
   welcome = 'Bienvenido a mi primera aplicación con Angular';
   tasks = [
     'now testing messagin on teams automation',
-    'status pending'.
+    'status pending'
   ];
 }
