@@ -46,3 +46,24 @@ jobs:
           target: prev
           channelId: prev-pr${{ github.event.pull_request.number }}
           expires: 5d
+
+  announce: 
+    name: Announce Deploy Preview Channel
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Announce Deploy Preview Channel
+        uses: toko-bifrost/ms-teams-deploy-card@master
+        if: always()
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
+          timezone: "America/Mexico_City"
+          # enable-view-status: false
+          # view-status-action-text: "Check deploy status" # see what this does to define text
+          # custom-actions: add a button to see deployment logs
+          # custom-facts: |
+          #   - name: 
+          #     value:
