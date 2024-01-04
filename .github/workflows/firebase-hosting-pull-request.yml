@@ -51,7 +51,7 @@ jobs:
           expires: 5d
 
   announce: 
-    # name: Announce Deploy Preview Channel
+    name: Announce Deploy Preview Channel
     if: ${{ always() }}
     needs: [build, deploy]
     runs-on: ubuntu-latest
@@ -59,7 +59,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - uses: reediculous456/ms-teams-deploy-card@v1.1.0
-      # - uses: patrickpaulin/ms-teams-deploy-card@master
         with:
           github-token: ${{ github.token }}
           webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
@@ -76,11 +75,9 @@ jobs:
           #     value:
         env: 
           DEPLOY_URL: ${{ needs.deploy.outputs.url }}
-      - name: show result
-        run: echo "${{ needs.deploy.result }} ${{ needs.build.result }}"
-      - name: Build matrix failed
-        if: ${{ needs.build.result != 'success' || needs.deploy.result != 'success' }}
+      - name: Jobs failed
+        # if: ${{ needs.build.result != 'success' || needs.deploy.result != 'success' }}
         run: exit 1
-      - name: Build matrix succeeded
+      - name: Jobs succeeded
         if: ${{ needs.build.result == 'success' && needs.deploy.result == 'success' }}
         run: exit 0
