@@ -75,3 +75,11 @@ jobs:
           #     value:
         env: 
           DEPLOY_URL: ${{ needs.deploy.outputs.url }}
+      - name: show result
+        run: echo ${{ needs.deploy.result }}
+      - name: Build matrix failed
+        if: ${{ needs.deploy.result != 'success' }}
+        run: exit 1
+      - name: Build matrix succeeded
+        if: ${{ needs.deploy.result == 'success' }}
+        run: echo "Targets built and deployed"
