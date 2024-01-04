@@ -51,13 +51,13 @@ jobs:
           expires: 5d
 
   announce: 
-    name: Announce Deploy Preview Channel
+    # name: Announce Deploy Preview Channel
     if: ${{ always() }}
     needs: [build, deploy]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - uses: reediculous456/ms-teams-deploy-card@v1.1.0
       # - uses: patrickpaulin/ms-teams-deploy-card@master
         with:
@@ -79,7 +79,7 @@ jobs:
       - name: show result
         run: echo "${{ needs.deploy.result }} ${{ needs.build.result }}"
       - name: Build matrix failed
-        if: ${{ needs.build.result != 'success' || needs.deploy.result == 'success' }}
+        if: ${{ needs.build.result != 'success' || needs.deploy.result != 'success' }}
         run: exit 1
       - name: Build matrix succeeded
         if: ${{ needs.build.result == 'success' && needs.deploy.result == 'success' }}
