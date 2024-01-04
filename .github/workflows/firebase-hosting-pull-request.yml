@@ -29,8 +29,8 @@ jobs:
     name: Deploy to QA environment
     needs: build
     runs-on: ubuntu-latest
-    outputs:
-      url: ${{ steps.hosting.outputs.urls }}
+    # outputs:
+    #   url: ${{ steps.hosting.outputs.urls }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -63,9 +63,10 @@ jobs:
           channelId: prev-pr${{ github.event.pull_request.number }}
           expires: 5d
       - name: show url
-        run: echo "$DEPLOY_URL"
+        run: echo "$DEPLOY_URL $URLS"
         env: 
-          DEPLOY_URL: ${{ steps.hosting.outputs.urls[0] }}
+          URLS: ${{ steps.hosting.outputs.urls }}
+          DEPLOY_URL: ${{ steps.hosting.outputs.details_url }}
 
   # announce: 
   #   name: Announce Deploy Preview Channel
