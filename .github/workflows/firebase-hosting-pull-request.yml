@@ -58,7 +58,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Get Reviewers and Assignees
+        run: |
+          echo "reviewers=${{ toJson(github.event.pull_request.requested_reviewers.*.login) }}" >> $GITHUB_ENV
+          echo "assignees=${{ toJson(github.event.pull_request.assignees.*.login) }} >> $GITHUB_ENV
+      - name: Show github context
+        run: echo "${{ toJson(github) }}"
       - uses: reediculous456/ms-teams-deploy-card@v1.1.0
+        if: always()  
         with:
           github-token: ${{ github.token }}
           webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
@@ -67,26 +74,21 @@ jobs:
           timezone: "America/Mexico_City"
           view-status-action-text: "See action on GH"
           allowed-file-len: 10
-          show-on-failure: true
+          # show-on-failure: true
           custom-actions: |
             - text: See preview channel
               url: "${{ env.DEPLOY_URL }}"
           custom-facts: |
             - name: Message
               value: "Pull recent changes to avoid conflicts"
-            # - name: Reviewers
-            #   value: ${{ env.REVIEWERS }}
-            # - name: Assignees
-            #   value: ${{ env.ASSIGNEES }}
+            - name: Reviewers
+              value: ${{ env.REVIEWERS }}
+            - name: Assignees
+              value: ${{ env.ASSIGNEES }}
         env: 
           DEPLOY_URL: ${{ needs.deploy.outputs.url }}
-          ASSIGNEES: ${{ toJson(github.event.pull_request.assignees) }}
-          REVIEWERS: ${{ toJson(github.event.pull_request.requested_reviewers) }}
-      - name: LOG GITHUB
-        run: echo "${{ env.ASSIGNEES }} ${{ env.REVIEWERS }}"
-        env:
-          ASSIGNEES: ${{ toJson(github.event.pull_request.assignees) }}
-          REVIEWERS: ${{ toJson(github.event.pull_request.requested_reviewers) }}
+          REVIEWERS: ${{ env.reviewers }}
+          ASSIGNEES: ${{ env.assignees }}
       - name: Jobs failed
         if: ${{ needs.build.result != 'success' || needs.deploy.result != 'success' }}
         run: exit 1
