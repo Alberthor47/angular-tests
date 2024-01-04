@@ -51,7 +51,7 @@ jobs:
           expires: 5d
 
   announce: 
-    name: Announce Deploy Preview Channel
+    # name: Announce Deploy Preview Channel
     if: ${{ always() }}
     needs: [build, deploy]
     runs-on: ubuntu-latest
@@ -74,10 +74,10 @@ jobs:
           custom-facts: |
             - name: Message
               value: "Pull recent changes to avoid conflicts"
-            - name: Reviewers
-              value: ${{ env.REVIEWERS }}
-            - name: Assignees
-              value: ${{ env.ASSIGNEES }}
+            # - name: Reviewers
+            #   value: ${{ env.REVIEWERS }}
+            # - name: Assignees
+            #   value: ${{ env.ASSIGNEES }}
         env: 
           DEPLOY_URL: ${{ needs.deploy.outputs.url }}
           ASSIGNEES: ${{ toJson(github.event.pull_request.assignees) }}
@@ -88,7 +88,7 @@ jobs:
           ASSIGNEES: ${{ toJson(github.event.pull_request.assignees) }}
           REVIEWERS: ${{ toJson(github.event.pull_request.requested_reviewers) }}
       - name: Jobs failed
-        # if: ${{ needs.build.result != 'success' || needs.deploy.result != 'success' }}
+        if: ${{ needs.build.result != 'success' || needs.deploy.result != 'success' }}
         run: exit 1
       - name: Jobs succeeded
         if: ${{ needs.build.result == 'success' && needs.deploy.result == 'success' }}
