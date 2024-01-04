@@ -58,7 +58,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - uses: toko-bifrost/ms-teams-deploy-card@master
+      - uses: reediculous456/ms-teams-deploy-card@v1.1.0
         with:
           github-token: ${{ github.token }}
           webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
@@ -73,9 +73,5 @@ jobs:
           # custom-facts: |
           #   - name: 
           #     value:
-        env: 
-          DEPLOY_URL: ${{ needs.deploy.outputs.url }}
-      - name: show url
-        run: echo "$DEPLOY_URL"
         env: 
           DEPLOY_URL: ${{ needs.deploy.outputs.url }}
