@@ -32,8 +32,8 @@ jobs:
     # outputs:
     #   url: ${{ steps.hosting.outputs.urls }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      # - name: Checkout
+      - uses: actions/checkout@v2
       - uses: toko-bifrost/ms-teams-deploy-card@master
         with:
           github-token: ${{ github.token }}
@@ -43,18 +43,22 @@ jobs:
           timezone: "America/Mexico_City"
           view-status-action-text: "See action on GH"
           allowed-file-len: 10
-          # custom-actions: add a button to see deployment logs
+          # custom-actions: |
+          #   - text: See preview channel
+          #     url: "${{ env.DEPLOY_URL }}"
           # custom-facts: |
           #   - name: 
           #     value:
-      - name: Download Build Artifact
-        uses: actions/download-artifact@v4
+        # env: 
+        #   DEPLOY_URL: ${{ steps.hosting.outputs.details_url }}
+      # - name: Download Build Artifact
+      - uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist
-      - name: Deploy to Firebase Hosting
+      # - name: Deploy to Firebase Hosting
+      - uses: FirebaseExtended/action-hosting-deploy@v0
         id: hosting
-        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ANGULAR_TESTS_37360 }}'
@@ -62,8 +66,8 @@ jobs:
           target: prev
           channelId: prev-pr${{ github.event.pull_request.number }}
           expires: 5d
-      - name: show url
-        run: echo "$DEPLOY_URL $URLS"
+      # - name: show url
+      - run: echo "$DEPLOY_URL $URLS"
         env: 
           URLS: ${{ steps.hosting.outputs.urls }}
           DEPLOY_URL: ${{ steps.hosting.outputs.details_url }}
