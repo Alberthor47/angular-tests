@@ -70,11 +70,16 @@ jobs:
           custom-actions: |
             - text: See preview channel
               url: "${{ env.DEPLOY_URL }}"
-          # custom-facts: |
-          #   - name: 
-          #     value:
+          custom-facts: |
+            - name: Message
+              value: "Pull recent changes to avoid conflicts"
         env: 
           DEPLOY_URL: ${{ needs.deploy.outputs.url }}
+      - name: LOG GITHUB
+        run: echo "${{ env.ASSIGNEES }} ${{ env.REVIEWERS }}"
+        env:
+          ASSIGNEES: ${{ toJson(github.event.pull_request.assignees) }}
+          REVIEWERS: ${{ toJson(github.event.pull_request.requested_reviewers) }}
       - name: Jobs failed
         # if: ${{ needs.build.result != 'success' || needs.deploy.result != 'success' }}
         run: exit 1
