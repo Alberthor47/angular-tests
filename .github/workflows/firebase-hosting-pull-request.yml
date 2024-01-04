@@ -30,7 +30,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     outputs:
-      url: ${{ steps.hosting.outputs }}
+      url: ${{ steps.hosting.outputs.urls }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -67,7 +67,7 @@ jobs:
           show-on-start: false
           card-layout-exit: "complete"
           timezone: "America/Mexico_City"
-          view-status-action-text: "See Action on GH"
+          view-status-action-text: "See action on GH"
           allowed-file-len: 10
           # custom-actions: add a button to see deployment logs
           # custom-facts: |
