@@ -68,7 +68,7 @@ jobs:
         env:
           assignees: ${{ env.assignees }}
       - name: Get Reviewers
-        run: echo "reviewers=$(echo '${{ toJson(github.event.pull_request.requested_reviewers.*.login) }}' | jq 'join(", ")') >> $GITHUB_ENV
+        run: echo "reviewers=$(echo '${{ toJson(github.event.pull_request.requested_reviewers.*.login) }}' | jq 'join(", ")')" >> $GITHUB_ENV
       - name: Substitute Reviewers if empty
         run: |
           if [ -z "${{ env.reviewers }}" ]; then
