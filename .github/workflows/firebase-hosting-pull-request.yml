@@ -34,6 +34,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - uses: toko-bifrost/ms-teams-deploy-card@master
+        with:
+          github-token: ${{ github.token }}
+          webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
+          show-on-start: false
+          card-layout-exit: "complete"
+          timezone: "America/Mexico_City"
+          view-status-action-text: "See action on GH"
+          allowed-file-len: 10
+          # custom-actions: add a button to see deployment logs
+          # custom-facts: |
+          #   - name: 
+          #     value:
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
@@ -49,30 +62,33 @@ jobs:
           target: prev
           channelId: prev-pr${{ github.event.pull_request.number }}
           expires: 5d
-
-  announce: 
-    name: Announce Deploy Preview Channel
-    if: ${{ always() }}
-    needs: deploy
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - uses: toko-bifrost/ms-teams-deploy-card@master
-        if: always()
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
-          show-on-start: false
-          card-layout-exit: "complete"
-          timezone: "America/Mexico_City"
-          view-status-action-text: "See action on GH"
-          allowed-file-len: 10
-          # custom-actions: add a button to see deployment logs
-          # custom-facts: |
-          #   - name: 
-          #     value:
       - name: show url
         run: echo "$DEPLOY_URL"
         env: 
-          DEPLOY_URL: ${{ needs.deploy.outputs.url }}
+          DEPLOY_URL: ${{ steps.hosting.outputs.urls[0] }}
+
+  # announce: 
+  #   name: Announce Deploy Preview Channel
+  #   if: ${{ always() }}
+  #   needs: [build, deploy]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #     - uses: toko-bifrost/ms-teams-deploy-card@master
+  #       with:
+  #         github-token: ${{ github.token }}
+  #         webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
+  #         show-on-start: false
+  #         card-layout-exit: "complete"
+  #         timezone: "America/Mexico_City"
+  #         view-status-action-text: "See action on GH"
+  #         allowed-file-len: 10
+  #         # custom-actions: add a button to see deployment logs
+  #         # custom-facts: |
+  #         #   - name: 
+  #         #     value:
+  #     - name: show url
+  #       run: echo "$DEPLOY_URL"
+  #       env: 
+  #         DEPLOY_URL: ${{ needs.deploy.outputs.url }}
