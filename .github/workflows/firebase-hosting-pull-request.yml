@@ -58,12 +58,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Get Reviewers and Assignees
-        run: |
-          echo "assignees_raw=${{ toJson(github.event.pull_request.assignees.*.login) }} >> $GITHUB_ENV
-          echo "assignees=$(echo '${{ toJson(github.event.pull_request.assignees.*.login) }}' | jq 'join(", ")')" >> $GITHUB_ENV
-          echo "reviewers_raw=${{ toJson(github.event.pull_request.requested_reviewers.*.login) }}" >> $GITHUB_ENV
-          echo "reviewers=$(echo '${{ toJson(github.event.pull_request.requested_reviewers.*.login) }}' | jq 'join(","')) >> $GITHUB_ENV
+      - name: Get Assignees
+        run: echo "assignees=$(echo '${{ toJson(github.event.pull_request.assignees.*.login) }}' | jq 'join(", ")')" >> $GITHUB_ENV
+      - name: Get Reviewers
+        run: echo "reviewers=$(echo '${{ toJson(github.event.pull_request.requested_reviewers.*.login) }}' | jq 'join(","')) >> $GITHUB_ENV
       - name: Show github context
         run: echo "${{ toJson(github) }}"
       - uses: reediculous456/ms-teams-deploy-card@v1.1.0
