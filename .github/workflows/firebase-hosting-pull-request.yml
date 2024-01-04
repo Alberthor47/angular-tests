@@ -58,8 +58,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      # - uses: reediculous456/ms-teams-deploy-card@v1.1.0
-      - uses: patrickpaulin/ms-teams-deploy-card@master
+      - uses: reediculous456/ms-teams-deploy-card@v1.1.0
+      # - uses: patrickpaulin/ms-teams-deploy-card@master
         with:
           github-token: ${{ github.token }}
           webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
@@ -79,8 +79,8 @@ jobs:
       - name: show result
         run: echo "${{ needs.deploy.result }} ${{ needs.build.result }}"
       - name: Build matrix failed
-        if: ${{ needs.deploy.result != 'success' }}
+        if: ${{ needs.build.result != 'success' || needs.deploy.result == 'success' }}
         run: exit 1
       - name: Build matrix succeeded
-        if: ${{ needs.deploy.result == 'success' }}
+        if: ${{ needs.build.result == 'success' && needs.deploy.result == 'success' }}
         run: exit 0
