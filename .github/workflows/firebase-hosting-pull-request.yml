@@ -59,13 +59,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Get Assignees
+        run: echo "assignees=$(echo '${{ toJson(github.event.pull_request.assignees.*.login) }}' | jq 'join(", ")')" >> $GITHUB_ENV
+      - name: Substitute Assignees if empty
         run: |
-          echo "assignees=$(echo '${{ toJson(github.event.pull_request.assignees.*.login) }}' | jq 'join(", ")')" >> $GITHUB_ENV
-          if [ -z "$assignees" ]; then
-            echo "assignees="No Assignees" >> $GITHUB_ENV
+          if [ -z "${{ env.assignees }}" ]; then
+            echo "assignees=No Assignees" >> $GITHUB_ENV
           fi
+        env:
+          assignees: ${{ env.assignees }}
       - name: Get Reviewers
         run: echo "reviewers=$(echo '${{ toJson(github.event.pull_request.requested_reviewers.*.login) }}' | jq 'join(", ")') >> $GITHUB_ENV
+      - name: Substitute Reviewers if empty
+        run: |
+          if [ -z "${{ env.reviewers }}" ]; then
+            echo "reviewers=No Reviewers" >> $GITHUB_ENV
+          fi
+        env:
+          reviewers: ${{ env.reviewers }}
       - name: Show github context
         run: echo "${{ toJson(github) }}"
       - uses: reediculous456/ms-teams-deploy-card@v1.1.0
