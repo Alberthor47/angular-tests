@@ -29,6 +29,8 @@ jobs:
     name: Deploy to QA environment
     needs: build
     runs-on: ubuntu-latest
+    outputs:
+      url: ${{ steps.hosting.outputs }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -38,6 +40,7 @@ jobs:
           name: dist
           path: dist
       - name: Deploy to Firebase Hosting
+        id: hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
@@ -49,6 +52,7 @@ jobs:
 
   announce: 
     name: Announce Deploy Preview Channel
+    if: ${{ always() }}
     needs: deploy
     runs-on: ubuntu-latest
     steps:
@@ -60,10 +64,16 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
+          show-on-start: false
+          card-layout-exit: "complete"
           timezone: "America/Mexico_City"
-          # enable-view-status: false
-          # view-status-action-text: "Check deploy status" # see what this does to define text
+          view-status-action-text: "See Action on GH"
+          allowed-file-len: 10
           # custom-actions: add a button to see deployment logs
           # custom-facts: |
           #   - name: 
           #     value:
+      - name: show url
+        run: echo "$DEPLOY_URL"
+        env: 
+          DEPLOY_URL: ${{ needs.deploy.outputs.url }}
