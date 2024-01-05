@@ -13,6 +13,6 @@ export class AppComponent {
   title = 'todo-app';
   welcome = 'Bienvenido a mi primera aplicación con Angular';
   tasks = [
-    'Listo :D',
+    'seems to be everithing fine'
   ];
 }
